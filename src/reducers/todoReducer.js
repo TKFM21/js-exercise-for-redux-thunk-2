@@ -35,7 +35,6 @@ const todoReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 todos: [ ...state.todos, action.todo ]
-
             };
         default:
             return state;
