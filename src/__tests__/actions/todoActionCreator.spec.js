@@ -27,7 +27,9 @@ describe('action/todoActionCreator TEST', () => {
             };
         });
         axios.get.mockResolvedValue({
-            data: expectedResult
+            data: {
+                data: expectedResult
+            }
         });
 
         const store = mockStore();
