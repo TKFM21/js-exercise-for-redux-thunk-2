@@ -6,6 +6,7 @@ const API_URL = 'http://localhost:3001/api/todos';
 export const FETCH_REQUEST = 'FETCH_REQUEST';
 export const FETCH_SUCCESS = 'FETCH_SUCCESS';
 export const FETCH_FAILURE = 'FETCH_FAILURE';
+export const POST_SUCCESS = 'POST_SUCCESS';
 
 export const fetchTodos = () => {
     return async (dispatch) => {
@@ -14,6 +15,22 @@ export const fetchTodos = () => {
             const response = await axios.get(API_URL);
             const todos = Todo.todosToInstanceArray(response.data.data);
             dispatch( fetchSuccess(todos) );
+        } catch (error) {
+            dispatch( fetchFailure(error) );
+        }
+    };
+};
+
+export const postTodos = ({ title, body }) => {
+    return async (dispatch) => {
+        dispatch( fetchRequest() );
+        try {
+            const response = await axios.post(API_URL, {
+                title,
+                body
+            });
+            const todo = new Todo(response.data);
+            dispatch( postSuccess(todo) );
         } catch (error) {
             dispatch( fetchFailure(error) );
         }
@@ -30,6 +47,13 @@ const fetchSuccess = (todos) => {
     return {
         type: FETCH_SUCCESS,
         todos
+    }
+};
+
+const postSuccess = (todo) => {
+    return {
+        type: POST_SUCCESS,
+        todo
     }
 };
 
