@@ -1,9 +1,9 @@
+import { postTodos } from '../../actions/todoPostActionCreator';
 import {
-    POST_REQUEST,
-    POST_SUCCESS,
-    POST_FAILURE,
-    postTodos
-} from '../../actions/todoPostActionCreator';
+    FETCH_REQUEST,
+    FETCH_SUCCESS,
+    FETCH_FAILURE
+} from '../../actions/todoActionCreator';
 import axios from 'axios';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
@@ -36,11 +36,11 @@ describe('action/todoPostActionCreator TEST', () => {
 
         expect( store.getActions() ).toStrictEqual([
             {
-                type: POST_REQUEST
+                type: FETCH_REQUEST
             },
             {
-                type: POST_SUCCESS,
-                todo: new Todo(expectedResult)
+                type: FETCH_SUCCESS,
+                todos: [new Todo(expectedResult)]
             }
         ]);
     });
@@ -57,10 +57,10 @@ describe('action/todoPostActionCreator TEST', () => {
 
         expect( store.getActions() ).toStrictEqual([
             {
-                type: POST_REQUEST
+                type: FETCH_REQUEST
             },
             {
-                type: POST_FAILURE,
+                type: FETCH_FAILURE,
                 error: {
                     message: expectedResult
                 }

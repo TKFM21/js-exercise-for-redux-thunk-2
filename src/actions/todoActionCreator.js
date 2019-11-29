@@ -20,20 +20,20 @@ export const fetchTodos = () => {
     };
 };
 
-const fetchRequest = () => {
+export const fetchRequest = () => {
     return {
         type: FETCH_REQUEST
     }
 };
 
-const fetchSuccess = (todos) => {
+export const fetchSuccess = (todos) => {
     return {
         type: FETCH_SUCCESS,
         todos
     }
 };
 
-const fetchFailure = (error) => {
+export const fetchFailure = (error) => {
     return {
         type: FETCH_FAILURE,
         error
