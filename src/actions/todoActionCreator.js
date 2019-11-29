@@ -20,20 +20,36 @@ export const fetchTodos = () => {
     };
 };
 
-export const fetchRequest = () => {
+export const postTodos = ({ title, body }) => {
+    return async (dispatch) => {
+        dispatch( fetchRequest() );
+        try {
+            const response = await axios.post(API_URL, {
+                title,
+                body
+            });
+            const todo = new Todo(response.data);
+            dispatch( fetchSuccess([todo]) );
+        } catch (error) {
+            dispatch( fetchFailure(error) );
+        }
+    };
+};
+
+const fetchRequest = () => {
     return {
         type: FETCH_REQUEST
     }
 };
 
-export const fetchSuccess = (todos) => {
+const fetchSuccess = (todos) => {
     return {
         type: FETCH_SUCCESS,
         todos
     }
 };
 
-export const fetchFailure = (error) => {
+const fetchFailure = (error) => {
     return {
         type: FETCH_FAILURE,
         error
