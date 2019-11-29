@@ -6,6 +6,7 @@ const API_URL = 'http://localhost:3001/api/todos';
 export const FETCH_REQUEST = 'FETCH_REQUEST';
 export const FETCH_SUCCESS = 'FETCH_SUCCESS';
 export const FETCH_FAILURE = 'FETCH_FAILURE';
+export const POST_SUCCESS = 'POST_SUCCESS';
 
 export const fetchTodos = () => {
     return async (dispatch) => {
@@ -29,7 +30,7 @@ export const postTodos = ({ title, body }) => {
                 body
             });
             const todo = new Todo(response.data);
-            dispatch( fetchSuccess([todo]) );
+            dispatch( postSuccess(todo) );
         } catch (error) {
             dispatch( fetchFailure(error) );
         }
@@ -46,6 +47,13 @@ const fetchSuccess = (todos) => {
     return {
         type: FETCH_SUCCESS,
         todos
+    }
+};
+
+const postSuccess = (todo) => {
+    return {
+        type: POST_SUCCESS,
+        todo
     }
 };
 

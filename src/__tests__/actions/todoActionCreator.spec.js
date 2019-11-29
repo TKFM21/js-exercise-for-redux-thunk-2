@@ -3,6 +3,7 @@ import {
     FETCH_SUCCESS,
     FETCH_FAILURE,
     fetchTodos,
+    POST_SUCCESS,
     postTodos
 } from '../../actions/todoActionCreator';
 import axios from 'axios';
@@ -71,12 +72,12 @@ describe('action/todoActionCreator TEST', () => {
     describe('POST', () => {
         it('success post', async () => {
             const expectedResult = {
-                    id: 1,
-                    title: 'dummy title',
-                    body: 'dummy body',
-                    complete: false,
-                    createdAt: '2019-10-29T04:30:13.511Z',
-                    updatedAt: '2019-10-29T04:30:13.511Z'
+                id: 1,
+                title: 'dummy title',
+                body: 'dummy body',
+                complete: false,
+                createdAt: '2019-10-29T04:30:13.511Z',
+                updatedAt: '2019-10-29T04:30:13.511Z'
             };
             axios.post.mockResolvedValue({
                 data: expectedResult
@@ -93,8 +94,8 @@ describe('action/todoActionCreator TEST', () => {
                     type: FETCH_REQUEST
                 },
                 {
-                    type: FETCH_SUCCESS,
-                    todos: [new Todo(expectedResult)]
+                    type: POST_SUCCESS,
+                    todo: new Todo(expectedResult)
                 }
             ]);
         });
