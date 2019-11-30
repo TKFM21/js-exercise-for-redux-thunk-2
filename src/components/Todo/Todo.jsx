@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { fetchTodos } from '../../actions/todoActionCreator';
+import { fetchTodos, postTodos } from '../../actions/todoActionCreator';
 
 const Todo = (props) => {
+    const [title, setTitle] = useState('');
+    const [body, setBody] = useState('');
+
+    const onClickHandler = () => {
+        setTitle('');
+        setBody('');
+        props.postTodos( {title, body} );
+    };
+
     if (props.isLoading) {
         return (
             <div>
@@ -26,6 +35,28 @@ const Todo = (props) => {
         return (
             <div>
                 <h1>Todo List</h1>
+                <label>
+                    <input
+                        type="text"
+                        name="title"
+                        value={ title }
+                        onChange={ (event) => setTitle(event.target.value) }
+                    >
+                    </input>
+                </label>
+                <br />
+                <label>
+                    <textarea
+                        name="body"
+                        value={ body }
+                        onChange={ (event) => setBody(event.target.value) }
+                    >
+                    </textarea>
+                </label>
+                <br />
+                <button onClick={onClickHandler}>
+                    Post Todos
+                </button>
                 <table>
                     <thead>
                         <tr>
@@ -64,6 +95,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchTodos: () => {
             dispatch( fetchTodos() );
+        },
+        postTodos: ( {title, body} ) => {
+            dispatch( postTodos({title, body}) );
         }
     };
 };
