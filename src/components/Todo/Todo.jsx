@@ -7,9 +7,9 @@ const Todo = (props) => {
     const [body, setBody] = useState('');
 
     const onClickHandler = () => {
+        props.postTodos( {title, body} );
         setTitle('');
         setBody('');
-        props.postTodos( {title, body} );
     };
 
     if (props.isLoading) {
