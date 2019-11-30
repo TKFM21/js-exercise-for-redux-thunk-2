@@ -1,7 +1,8 @@
 import {
     FETCH_REQUEST,
     FETCH_SUCCESS,
-    FETCH_FAILURE
+    FETCH_FAILURE,
+    POST_SUCCESS
 } from '../actions/todoActionCreator';
 
 const initialState = {
@@ -14,9 +15,8 @@ const todoReducer = (state = initialState, action) => {
     switch (action.type) {
         case FETCH_REQUEST:
             return {
-                isLoading: true,
-                todos: [],
-                error: null
+                ...state,
+                isLoading: true
             };
         case FETCH_SUCCESS:
             return {
@@ -29,6 +29,12 @@ const todoReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 error: action.error
+            };
+        case POST_SUCCESS:
+            return {
+                ...state,
+                isLoading: false,
+                todos: [ ...state.todos, action.todo ]
             };
         default:
             return state;

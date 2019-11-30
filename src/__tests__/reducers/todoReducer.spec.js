@@ -2,9 +2,22 @@ import todoReducer from '../../reducers/todoReducer';
 import {
     FETCH_REQUEST,
     FETCH_SUCCESS,
-    FETCH_FAILURE
+    FETCH_FAILURE,
+    POST_SUCCESS
 } from '../../actions/todoActionCreator';
 import Todo from '../../models/Todo';
+
+const dummyTodos = [1, 2].map( number => {
+    const data = {
+        id: number,
+        title: 'dummy title' + number,
+        body: 'dummy body' + number,
+        complete: false,
+        createdAt: '2019-10-29T04:30:13.511Z',
+        updatedAt: '2019-10-29T04:30:13.511Z'
+    };
+    return new Todo(data);
+});
 
 describe('reducers/todoReducer TEST', () => {
     it('case FETCH_REQUESTはisLoadingがtrue', () => {
@@ -17,17 +30,6 @@ describe('reducers/todoReducer TEST', () => {
         });
     });
     it('case FETCH_SUCCESSはisLoadingがfalse, todosにデータあり', () => {
-        const dummyTodos = [1, 2].map( number => {
-            const data = {
-                id: number,
-                title: 'dummy title' + number,
-                body: 'dummy body' + number,
-                complete: false,
-                createdAt: '2019-10-29T04:30:13.511Z',
-                updatedAt: '2019-10-29T04:30:13.511Z'
-            };
-            return new Todo(data);
-        });
         const action = { type: FETCH_SUCCESS, todos: dummyTodos };
         const newState = todoReducer(undefined, action);
         expect( newState ).toStrictEqual({
@@ -44,6 +46,30 @@ describe('reducers/todoReducer TEST', () => {
             isLoading: false,
             todos: [],
             error: dummyError
+        });
+    });
+    it('case POST_SUCCESS', () => {
+        const dummyTodo = new Todo({
+            id: 3,
+            title: 'dummy title',
+            body: 'dummy body',
+            complete: false,
+            createdAt: '2019-10-29T04:30:13.511Z',
+            updatedAt: '2019-10-29T04:30:13.511Z'
+        });
+        const action = { type: POST_SUCCESS, todo: dummyTodo };
+        const newState = todoReducer(
+            {
+                isLoading: false,
+                todos: dummyTodos,
+                error: null
+            },
+            action
+        );
+        expect( newState ).toStrictEqual({
+            isLoading: false,
+            todos: [ ...dummyTodos, dummyTodo ],
+            error: null
         });
     });
 });
