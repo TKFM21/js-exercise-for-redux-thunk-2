@@ -4,7 +4,9 @@ import {
     FETCH_FAILURE,
     fetchTodos,
     POST_SUCCESS,
-    postTodos
+    postTodos,
+    PUT_SUCCESS,
+    putTodos
 } from '../../actions/todoActionCreator';
 import axios from 'axios';
 import configureMockStore from 'redux-mock-store';
@@ -108,6 +110,64 @@ describe('action/todoActionCreator TEST', () => {
             await store.dispatch(postTodos({
                 title: 'dummy title',
                 body: 'dummy body'
+            }));
+    
+            expect( store.getActions() ).toStrictEqual([
+                {
+                    type: FETCH_REQUEST
+                },
+                {
+                    type: FETCH_FAILURE,
+                    error: {
+                        message: expectedResult
+                    }
+                }
+            ]);
+        });
+    });
+    describe('PUT', () => {
+        it('success put', async () => {
+            const expectedResult = {
+                id: 1,
+                title: 'dummy title',
+                body: 'dummy body',
+                complete: true,
+                createdAt: '2019-10-29T04:30:13.511Z',
+                updatedAt: '2019-10-29T04:30:13.511Z'
+            };
+            axios.put.mockResolvedValue({
+                data: expectedResult
+            });
+    
+            const store = mockStore();
+            await store.dispatch(putTodos({
+                id: 1,
+                title: 'dummy title',
+                body: 'dummy body',
+                complete: true
+            }));
+    
+            expect( store.getActions() ).toStrictEqual([
+                {
+                    type: FETCH_REQUEST
+                },
+                {
+                    type: PUT_SUCCESS,
+                    todo: new Todo(expectedResult)
+                }
+            ]);
+        });
+        it('failure put', async () => {
+            const expectedResult = 'error';
+            axios.put.mockRejectedValue({
+                message: expectedResult
+            });
+            const store = mockStore();
+            await store.dispatch(putTodos({
+                id: 1,
+                title: 'dummy title',
+                body: 'dummy body',
+                complete: true
             }));
     
             expect( store.getActions() ).toStrictEqual([

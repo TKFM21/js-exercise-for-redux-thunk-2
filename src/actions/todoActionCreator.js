@@ -7,6 +7,7 @@ export const FETCH_REQUEST = 'FETCH_REQUEST';
 export const FETCH_SUCCESS = 'FETCH_SUCCESS';
 export const FETCH_FAILURE = 'FETCH_FAILURE';
 export const POST_SUCCESS = 'POST_SUCCESS';
+export const PUT_SUCCESS = 'PUT_SUCCESS';
 
 export const fetchTodos = () => {
     return async (dispatch) => {
@@ -37,6 +38,23 @@ export const postTodos = ({ title, body }) => {
     };
 };
 
+export const putTodos = ({ id, title, body, complete }) => {
+    return async (dispatch) => {
+        dispatch( fetchRequest() );
+        try {
+            const response = await axios.put(API_URL + id, {
+                title,
+                body,
+                complete
+            });
+            const todo = new Todo(response.data);
+            dispatch( putSuccess(todo) );
+        } catch (error) {
+            dispatch( fetchFailure(error) );
+        }
+    };
+};
+
 const fetchRequest = () => {
     return {
         type: FETCH_REQUEST
@@ -53,6 +71,13 @@ const fetchSuccess = (todos) => {
 const postSuccess = (todo) => {
     return {
         type: POST_SUCCESS,
+        todo
+    }
+};
+
+const putSuccess = (todo) => {
+    return {
+        type: PUT_SUCCESS,
         todo
     }
 };
