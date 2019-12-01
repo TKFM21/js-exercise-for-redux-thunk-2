@@ -2,7 +2,8 @@ import {
     FETCH_REQUEST,
     FETCH_SUCCESS,
     FETCH_FAILURE,
-    POST_SUCCESS
+    POST_SUCCESS,
+    PUT_SUCCESS
 } from '../actions/todoActionCreator';
 
 const initialState = {
@@ -35,6 +36,18 @@ const todoReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 todos: [ ...state.todos, action.todo ]
+            };
+        case PUT_SUCCESS:
+            const updateTodos = state.todos.map( todo => {
+                if (action.todo.id === todo.id) {
+                    return action.todo;
+                }
+                return todo;
+            });
+            return {
+                ...state,
+                isLoading: false,
+                todos: updateTodos
             };
         default:
             return state;
