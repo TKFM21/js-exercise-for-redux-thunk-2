@@ -42,7 +42,7 @@ export const putTodos = ({ id, title, body, complete }) => {
     return async (dispatch) => {
         dispatch( fetchRequest() );
         try {
-            const response = await axios.put(API_URL + id, {
+            const response = await axios.put(API_URL + '/' + id, {
                 title,
                 body,
                 complete

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchTodos, postTodos } from '../../actions/todoActionCreator';
 
@@ -24,7 +25,7 @@ const Todo = (props) => {
             return (
                 <tr key={index}>
                     <td>{todo.id}</td>
-                    <td>{todo.title}</td>
+                    <td><Link to={`/${todo.id}`}>{todo.title}</Link></td>
                     <td>{todo.body}</td>
                     <td>{todo.complete ? '完了' : '未完了'}</td>
                     <td>{todo.createdAt.toLocaleString("ja-JP")}</td>
