@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchTodos, postTodos, deleteTodos } from '../../actions/todoActionCreator';
+import { fetchTodos, postTodos, putTodos, deleteTodos } from '../../actions/todoActionCreator';
 
 const Todo = (props) => {
     const [title, setTitle] = useState('');
@@ -27,7 +27,18 @@ const Todo = (props) => {
                     <td>{todo.id}</td>
                     <td><Link to={`/${todo.id}`}>{todo.title}</Link></td>
                     <td>{todo.body}</td>
-                    <td>{todo.complete ? '完了' : '未完了'}</td>
+                    <td>
+                        <button
+                            onClick={
+                                () => props.putTodos({
+                                    id: todo.id,
+                                    complete: !todo.complete
+                                })
+                            }
+                        >
+                            {todo.complete ? '完了' : '未完了'}
+                        </button>
+                    </td>
                     <td>{todo.createdAt.toLocaleString("ja-JP")}</td>
                     <td>{todo.updatedAt.toLocaleString("ja-JP")}</td>
                     <td><button onClick={() => props.deleteTodos(todo.id)}>Delete</button></td>
@@ -101,6 +112,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         postTodos: ( {title, body} ) => {
             dispatch( postTodos({title, body}) );
+        },
+        putTodos: ( {id, title, body, complete} ) => {
+            dispatch( putTodos({id, title, body, complete}) );
         },
         deleteTodos: (id) => {
             dispatch( deleteTodos(id) );
