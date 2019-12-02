@@ -8,6 +8,7 @@ export const FETCH_SUCCESS = 'FETCH_SUCCESS';
 export const FETCH_FAILURE = 'FETCH_FAILURE';
 export const POST_SUCCESS = 'POST_SUCCESS';
 export const PUT_SUCCESS = 'PUT_SUCCESS';
+export const DELETE_SUCCESS = 'DELETE_SUCCESS';
 
 export const fetchTodos = () => {
     return async (dispatch) => {
@@ -55,6 +56,19 @@ export const putTodos = ({ id, title, body, complete }) => {
     };
 };
 
+export const deleteTodos = (id) => {
+    return async (dispatch) => {
+        dispatch( fetchRequest() );
+        try {
+            const response = await axios.delete(API_URL + '/' + id);
+            const todo = new Todo(response.data);
+            dispatch( deleteSuccess(todo) );
+        } catch (error) {
+            dispatch( fetchFailure(error) );
+        }
+    };
+};
+
 const fetchRequest = () => {
     return {
         type: FETCH_REQUEST
@@ -78,6 +92,13 @@ const postSuccess = (todo) => {
 const putSuccess = (todo) => {
     return {
         type: PUT_SUCCESS,
+        todo
+    }
+};
+
+const deleteSuccess = (todo) => {
+    return {
+        type: DELETE_SUCCESS,
         todo
     }
 };
