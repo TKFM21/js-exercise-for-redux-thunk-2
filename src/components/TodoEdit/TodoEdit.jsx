@@ -5,7 +5,7 @@ import { putTodos } from '../../actions/todoActionCreator';
 
 const TodoEdit = (props) => {
     const id = parseInt(props.match.params.id, 10);
-    const targetTodo = props.todos.filter( todo => todo.id === id )[0];
+    const targetTodo = props.todos.find( todo => todo.id === id );
     const [title, setTitle] = useState(targetTodo ? targetTodo.title : '');
     const [body, setBody] = useState(targetTodo ? targetTodo.body : '');
     const [complete, setComplete] = useState(targetTodo ? targetTodo.complete : false);
@@ -15,7 +15,7 @@ const TodoEdit = (props) => {
     if (props.isLoading) {
         return (
             <div>
-                Now Loading...
+                Now Updating...
             </div>
         );
     }
