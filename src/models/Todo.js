@@ -34,10 +34,6 @@ class Todo {
         this._body = text;
     }
 
-    toggleComplete() {
-        this._complete = !this._complete;
-    }
-
     static todosToInstanceArray(todos) {
         return todos.map( todo => {
             const data = {

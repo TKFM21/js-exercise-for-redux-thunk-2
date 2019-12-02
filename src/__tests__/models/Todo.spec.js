@@ -30,13 +30,6 @@ describe('models/Todo TEST', () => {
         expect( newTodo.body ).toStrictEqual( updateBody );
     });
 
-    it('toggleCompleteはcompleteを反転させる', () => {
-        const newTodo = new Todo(dummy);
-        expect( newTodo.complete ).toStrictEqual( false );
-        newTodo.toggleComplete();
-        expect( newTodo.complete ).toStrictEqual( true );
-    });
-
     it('static method todosToInstanceArrayはオブジェクト要素の配列を引数にinstance要素の配列でreturn', () => {
         const inputData = [1, 2, 3].map( number => {
             return {
