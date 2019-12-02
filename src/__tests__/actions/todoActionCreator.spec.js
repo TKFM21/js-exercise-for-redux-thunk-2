@@ -6,7 +6,9 @@ import {
     POST_SUCCESS,
     postTodos,
     PUT_SUCCESS,
-    putTodos
+    putTodos,
+    DELETE_SUCCESS,
+    deleteTodos
 } from '../../actions/todoActionCreator';
 import axios from 'axios';
 import configureMockStore from 'redux-mock-store';
@@ -169,6 +171,56 @@ describe('action/todoActionCreator TEST', () => {
                 body: 'dummy body',
                 complete: true
             }));
+    
+            expect( store.getActions() ).toStrictEqual([
+                {
+                    type: FETCH_REQUEST
+                },
+                {
+                    type: FETCH_FAILURE,
+                    error: {
+                        message: expectedResult
+                    }
+                }
+            ]);
+        });
+    });
+    describe('DELETE', () => {
+        it('success delete', async () => {
+            const expectedResult = {
+                id: 1,
+                title: 'dummy title',
+                body: 'dummy body',
+                complete: true,
+                createdAt: '2019-10-29T04:30:13.511Z',
+                updatedAt: '2019-10-29T04:30:13.511Z'
+            };
+            axios.delete.mockResolvedValue({
+                data: expectedResult
+            });
+    
+            const store = mockStore();
+            const deleteId = 1;
+            await store.dispatch(deleteTodos(deleteId));
+    
+            expect( store.getActions() ).toStrictEqual([
+                {
+                    type: FETCH_REQUEST
+                },
+                {
+                    type: DELETE_SUCCESS,
+                    todo: new Todo(expectedResult)
+                }
+            ]);
+        });
+        it('failure delete', async () => {
+            const expectedResult = 'error';
+            axios.delete.mockRejectedValue({
+                message: expectedResult
+            });
+            const store = mockStore();
+            const deleteId = 1;
+            await store.dispatch(deleteTodos(deleteId));
     
             expect( store.getActions() ).toStrictEqual([
                 {
