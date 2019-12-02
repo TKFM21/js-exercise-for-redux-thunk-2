@@ -3,7 +3,8 @@ import {
     FETCH_SUCCESS,
     FETCH_FAILURE,
     POST_SUCCESS,
-    PUT_SUCCESS
+    PUT_SUCCESS,
+    DELETE_SUCCESS
 } from '../actions/todoActionCreator';
 
 const initialState = {
@@ -48,6 +49,15 @@ const todoReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 todos: updateTodos
+            };
+        case DELETE_SUCCESS:
+            const deleteTodos = state.todos.filter( todo => {
+                return action.todo.id !== todo.id;
+            });
+            return {
+                ...state,
+                isLoading: false,
+                todos: deleteTodos
             };
         default:
             return state;
