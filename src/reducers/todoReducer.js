@@ -52,8 +52,7 @@ const todoReducer = (state = initialState, action) => {
             };
         case DELETE_SUCCESS:
             const deleteTodos = state.todos.filter( todo => {
-                if (action.todo.id === todo.id) return false;
-                return true;
+                return action.todo.id !== todo.id;
             });
             return {
                 ...state,
