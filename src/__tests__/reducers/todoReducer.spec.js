@@ -4,7 +4,8 @@ import {
     FETCH_SUCCESS,
     FETCH_FAILURE,
     POST_SUCCESS,
-    PUT_SUCCESS
+    PUT_SUCCESS,
+    DELETE_SUCCESS
 } from '../../actions/todoActionCreator';
 import Todo from '../../models/Todo';
 
@@ -94,6 +95,30 @@ describe('reducers/todoReducer TEST', () => {
         expect( newState ).toStrictEqual({
             isLoading: false,
             todos: [dummyTodos[0], dummyTodo],
+            error: null
+        });
+    });
+    it('case DELETE_SUCCESS', () => {
+        const dummyTodo = new Todo({
+            id: 2,
+            title: 'update title',
+            body: 'update body',
+            complete: true,
+            createdAt: '2019-10-29T04:30:13.511Z',
+            updatedAt: '2019-10-29T04:30:13.511Z'
+        });
+        const action = { type: DELETE_SUCCESS, todo: dummyTodo };
+        const newState = todoReducer(
+            {
+                isLoading: false,
+                todos: dummyTodos,
+                error: null
+            },
+            action
+        );
+        expect( newState ).toStrictEqual({
+            isLoading: false,
+            todos: [dummyTodos[0]],
             error: null
         });
     });
