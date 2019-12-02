@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchTodos, postTodos } from '../../actions/todoActionCreator';
+import { fetchTodos, postTodos, deleteTodos } from '../../actions/todoActionCreator';
 
 const Todo = (props) => {
     const [title, setTitle] = useState('');
@@ -30,6 +30,7 @@ const Todo = (props) => {
                     <td>{todo.complete ? '完了' : '未完了'}</td>
                     <td>{todo.createdAt.toLocaleString("ja-JP")}</td>
                     <td>{todo.updatedAt.toLocaleString("ja-JP")}</td>
+                    <td><button onClick={() => props.deleteTodos(todo.id)}>Delete</button></td>
                 </tr>
             );
         });
@@ -67,6 +68,7 @@ const Todo = (props) => {
                             <th>Comp</th>
                             <th>Created At</th>
                             <th>Updated At</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -99,6 +101,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         postTodos: ( {title, body} ) => {
             dispatch( postTodos({title, body}) );
+        },
+        deleteTodos: (id) => {
+            dispatch( deleteTodos(id) );
         }
     };
 };
