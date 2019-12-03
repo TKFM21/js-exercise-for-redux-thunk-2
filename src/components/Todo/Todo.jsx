@@ -6,7 +6,7 @@ import { fetchTodos, postTodos, putTodos, deleteTodos } from '../../actions/todo
 const Todo = (props) => {
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
-    const [formOn, setFormOn] = useState(null);
+    const [selectedTodo, setSelectedTodo] = useState(null);
     const [formBody, setFormBody] = useState('');
 
     const firstMountRun = props.fetchTodos;
@@ -23,10 +23,10 @@ const Todo = (props) => {
     const onKeyDown = (event) => {
         if (event.shiftKey && event.keyCode === 13) {
             props.putTodos({
-                id: formOn.id,
+                id: selectedTodo.id,
                 body: formBody
             });
-            setFormOn(null);
+            setSelectedTodo(null);
         }
     };
 
@@ -43,7 +43,7 @@ const Todo = (props) => {
     };
 
     const onClickBody = (todo) => {
-        setFormOn(todo);
+        setSelectedTodo(todo);
         setFormBody(todo.body);
     };
 
@@ -58,7 +58,7 @@ const Todo = (props) => {
                     <td
                         onClick={() => onClickBody(todo)}
                     >
-                        {formOn === todo ? inputBodyForm() : todo.body}
+                        {selectedTodo === todo ? inputBodyForm() : todo.body}
                     </td>
                     <td>
                         <button
