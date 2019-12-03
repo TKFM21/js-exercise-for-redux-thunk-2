@@ -6,11 +6,11 @@ import { fetchTodos, postTodos, putTodos, deleteTodos } from '../../actions/todo
 const Todo = (props) => {
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
-
+    
+    const firstMountRun = props.fetchTodos;
     useEffect(() => {
-        props.fetchTodos();
-    // eslint-disable-next-line
-    }, []);
+        firstMountRun();
+    }, [firstMountRun]);
 
     const onClickHandler = () => {
         props.postTodos( {title, body} );
