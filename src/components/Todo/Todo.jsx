@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchTodos, postTodos, putTodos, deleteTodos } from '../../actions/todoActionCreator';
@@ -6,6 +6,11 @@ import { fetchTodos, postTodos, putTodos, deleteTodos } from '../../actions/todo
 const Todo = (props) => {
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
+    
+    const firstMountRun = props.fetchTodos;
+    useEffect(() => {
+        firstMountRun();
+    }, [firstMountRun]);
 
     const onClickHandler = () => {
         props.postTodos( {title, body} );
