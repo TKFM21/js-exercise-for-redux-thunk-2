@@ -1,11 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchTodos, postTodos, putTodos, deleteTodos } from '../../actions/todoActionCreator';
+import Form from '../Form/Form';
+import './Todo.css';
+
+import {
+    useStyles,
+    Table,
+    TableRow,
+    TableBody,
+    TableHead,
+    Paper,
+    StyledTableCell,
+    StyledTableRow
+} from '../Table/Table';
+
+import Button from '@material-ui/core/Button';
+
+import Link from '@material-ui/core/Link';
+
+import TextField from '@material-ui/core/TextField';
+
+const Link1 = React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />);
 
 const Todo = (props) => {
-    const [title, setTitle] = useState('');
-    const [body, setBody] = useState('');
+    const classes = useStyles();
+
     const [selectedTodo, setSelectedTodo] = useState(null);
     const [formBody, setFormBody] = useState('');
 
@@ -13,21 +34,6 @@ const Todo = (props) => {
     useEffect(() => {
         firstMountRun();
     }, [firstMountRun]);
-
-    const onClickHandler = () => {
-        const trimTitle = title.trim();
-        const trimBody = body.trim();
-        if (!trimTitle || !trimBody) {
-            window.alert('入力が空です。');
-            return;
-        }
-        props.postTodos({
-            title: trimTitle,
-            body: trimBody
-        });
-        setTitle('');
-        setBody('');
-    };
 
     const onKeyDown = (event) => {
         if (event.shiftKey && event.keyCode === 13) {
@@ -45,9 +51,8 @@ const Todo = (props) => {
 
     const inputBodyForm = () => {
         return (
-            <input
-                type="text"
-                name="form-body"
+            <TextField
+                id="standard-basic"
                 value={ formBody }
                 onChange={ (event) => setFormBody(event.target.value) }
                 onKeyDown={ onKeyDown }
@@ -64,80 +69,74 @@ const Todo = (props) => {
     
     if (props.todos.length) {
         const todoItems = props.todos.map( todo => {
+            const { id, title, body, complete, createdAt, updatedAt } = todo;
             return (
-                <tr key={todo.id}>
-                    <td>{todo.id}</td>
-                    <td><Link to={`/${todo.id}`}>{todo.title}</Link></td>
-                    <td
+                <StyledTableRow key={id}>
+                    <StyledTableCell>{id}</StyledTableCell>
+                    <StyledTableCell>
+                        <Link component={Link1} to={`/${id}`}>
+                            {title}
+                        </Link>
+                    </StyledTableCell>
+                    <StyledTableCell
                         onClick={() => onClickBody(todo)}
                     >
-                        {selectedTodo === todo ? inputBodyForm() : todo.body}
-                    </td>
-                    <td>
-                        <button
-                            onClick={
-                                () => props.putTodos({
-                                    id: todo.id,
-                                    complete: !todo.complete
-                                })
-                            }
+                        {selectedTodo === todo ? inputBodyForm() : body}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                        <Button
+                            onClick={() => props.putTodos({id,　complete: !complete})}
+                            color={complete ? 'primary' : 'secondary'}
                         >
-                            {todo.complete ? '完了' : '未完了'}
-                        </button>
-                    </td>
-                    <td>{todo.createdAt.toLocaleString("ja-JP")}</td>
-                    <td>{todo.updatedAt.toLocaleString("ja-JP")}</td>
-                    <td><button onClick={() => props.deleteTodos(todo.id)}>Delete</button></td>
-                </tr>
+                            {complete ? '完了' : '未完了'}
+                        </Button>
+                    </StyledTableCell>
+                    <StyledTableCell>{createdAt.toLocaleString("ja-JP")}</StyledTableCell>
+                    <StyledTableCell>{updatedAt.toLocaleString("ja-JP")}</StyledTableCell>
+                    <StyledTableCell>
+                        <Button
+                            onClick={() => props.deleteTodos(id)}
+                            variant="outlined"
+                            color="secondary"
+                        >
+                            DELETE
+                        </Button>
+                    </StyledTableCell>
+                </StyledTableRow>
             );
         });
         return (
             <div>
                 <h1>Todo List</h1>
-                <label>Title: 
-                    <input
-                        type="text"
-                        name="title"
-                        value={ title }
-                        onChange={ (event) => setTitle(event.target.value) }
-                    />
-                </label>
-                <br />
-                <label>Body:
-                    <textarea
-                        name="body"
-                        value={ body }
-                        onChange={ (event) => setBody(event.target.value) }
-                    />
-                </label>
-                <br />
-                <button onClick={onClickHandler}>
-                    Post Todos
-                </button>
+                <Form />
                 <hr/>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Title</th>
-                            <th>Body</th>
-                            <th>Comp</th>
-                            <th>Created At</th>
-                            <th>Updated At</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {todoItems}
-                    </tbody>
-                </table>
+                <div className="table-container">
+                    <Paper className={classes.root}>
+                        <Table className={classes.table} aria-label="customized table">
+                            <TableHead>
+                                <TableRow>
+                                    <StyledTableCell>ID</StyledTableCell>
+                                    <StyledTableCell>Title</StyledTableCell>
+                                    <StyledTableCell>Body</StyledTableCell>
+                                    <StyledTableCell>Completed</StyledTableCell>
+                                    <StyledTableCell>Created At</StyledTableCell>
+                                    <StyledTableCell>Updated At</StyledTableCell>
+                                    <StyledTableCell>Delete</StyledTableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {todoItems}
+                            </TableBody>
+                        </Table>
+                    </Paper>
+                </div>
             </div>
         );
     }
     return (
         <div>
             <h1>Todo App</h1>
-            <button onClick={props.fetchTodos}>Get Todos</button>
+            <Form />
         </div>
     );
 };
