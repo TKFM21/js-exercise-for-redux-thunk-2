@@ -6,7 +6,9 @@ import { fetchTodos, postTodos, putTodos, deleteTodos } from '../../actions/todo
 const Todo = (props) => {
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
-    
+    const [selectedTodo, setSelectedTodo] = useState(null);
+    const [formBody, setFormBody] = useState('');
+
     const firstMountRun = props.fetchTodos;
     useEffect(() => {
         firstMountRun();
@@ -18,20 +20,46 @@ const Todo = (props) => {
         setBody('');
     };
 
-    if (props.isLoading) {
+    const onKeyDown = (event) => {
+        if (event.shiftKey && event.keyCode === 13) {
+            props.putTodos({
+                id: selectedTodo.id,
+                body: formBody
+            });
+            setSelectedTodo(null);
+        }
+    };
+
+    const inputBodyForm = () => {
         return (
-            <div>
-                <h1>Now Loading...</h1>
-            </div>
+            <input
+                type="text"
+                name="form-body"
+                value={ formBody }
+                onChange={ (event) => setFormBody(event.target.value) }
+                onKeyDown={ onKeyDown }
+            />
         );
-    }
+    };
+
+    const onClickBody = (todo) => {
+        setSelectedTodo(todo);
+        setFormBody(todo.body);
+    };
+
+    if (props.isLoading) return <h1>Now Loading...</h1>;
+    
     if (props.todos.length) {
-        const todoItems = props.todos.map( (todo, index) => {
+        const todoItems = props.todos.map( todo => {
             return (
-                <tr key={index}>
+                <tr key={todo.id}>
                     <td>{todo.id}</td>
                     <td><Link to={`/${todo.id}`}>{todo.title}</Link></td>
-                    <td>{todo.body}</td>
+                    <td
+                        onClick={() => onClickBody(todo)}
+                    >
+                        {selectedTodo === todo ? inputBodyForm() : todo.body}
+                    </td>
                     <td>
                         <button
                             onClick={
@@ -53,28 +81,27 @@ const Todo = (props) => {
         return (
             <div>
                 <h1>Todo List</h1>
-                <label>
+                <label>Title: 
                     <input
                         type="text"
                         name="title"
                         value={ title }
                         onChange={ (event) => setTitle(event.target.value) }
-                    >
-                    </input>
+                    />
                 </label>
                 <br />
-                <label>
+                <label>Body:
                     <textarea
                         name="body"
                         value={ body }
                         onChange={ (event) => setBody(event.target.value) }
-                    >
-                    </textarea>
+                    />
                 </label>
                 <br />
                 <button onClick={onClickHandler}>
                     Post Todos
                 </button>
+                <hr/>
                 <table>
                     <thead>
                         <tr>

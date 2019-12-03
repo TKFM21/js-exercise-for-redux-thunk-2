@@ -12,13 +12,7 @@ const TodoEdit = (props) => {
 
     if (!targetTodo) return <Redirect to="/" />;
 
-    if (props.isLoading) {
-        return (
-            <div>
-                Now Updating...
-            </div>
-        );
-    }
+    if (props.isLoading) return <h1>Now Updating...</h1>;
 
     return (
         <div>
@@ -29,8 +23,7 @@ const TodoEdit = (props) => {
                     name="title"
                     value={ title }
                     onChange={ (event) => setTitle(event.target.value) }
-                >
-                </input>
+                />
             </label>
             <br />
             <label>Body:
@@ -38,8 +31,7 @@ const TodoEdit = (props) => {
                     name="body"
                     value={ body }
                     onChange={ (event) => setBody(event.target.value) }
-                >
-                </textarea>
+                />
             </label>
             <br />
             <button onClick={ () => setComplete(!complete) }>
