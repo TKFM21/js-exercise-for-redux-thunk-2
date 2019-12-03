@@ -1,0 +1,14 @@
+.input-form {
+    display: flex;
+    justify-content: center;
+}
+
+@media screen and (max-width: 767px) {
+    .input-form {
+      flex-direction: column;
+      margin: 8px;
+    }
+    .input-form Button {
+        margin: 5% 10%;
+    }
+}
