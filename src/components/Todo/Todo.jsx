@@ -15,17 +15,30 @@ const Todo = (props) => {
     }, [firstMountRun]);
 
     const onClickHandler = () => {
-        props.postTodos( {title, body} );
+        const trimTitle = title.trim();
+        const trimBody = body.trim();
+        if (!trimTitle || !trimBody) {
+            window.alert('入力が空です。');
+            return;
+        }
+        props.postTodos({
+            title: trimTitle,
+            body: trimBody
+        });
         setTitle('');
         setBody('');
     };
 
     const onKeyDown = (event) => {
         if (event.shiftKey && event.keyCode === 13) {
-            props.putTodos({
-                id: selectedTodo.id,
-                body: formBody
-            });
+            const trimFormBody = formBody.trim();
+            // 入力値が有り、かつ、既存内容と異なる場合に更新が実行される
+            if (trimFormBody && (trimFormBody !== selectedTodo.body)) {
+                props.putTodos({
+                    id: selectedTodo.id,
+                    body: formBody
+                });
+            }
             setSelectedTodo(null);
         }
     };
